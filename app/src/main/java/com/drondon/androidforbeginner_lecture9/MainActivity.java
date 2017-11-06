@@ -3,13 +3,11 @@ package com.drondon.androidforbeginner_lecture9;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,30 +18,28 @@ public class MainActivity extends AppCompatActivity {
         // Find ListView
         ListView listView = findViewById(R.id.list_view);
 
-        //Create User 1
-        Map<String, String> user = new HashMap<>();
-        user.put("name", "Bob");
-        user.put("lastname", "Marlay");
-        user.put("age", "12");
+        User user1 = new User("Bilbo", "Beginnd", 100, Color.GRAY);
+        User user2 = new User("Frodo", "Beginnd", 56, Color.YELLOW);
+        User user3 = new User("Sam", "Gamgee", 47, Color.RED);
+        User user4 = new User("Gendalph", "Gray", 230, Color.WHITE);
 
-        //Create User 2
-        Map<String, String> user2 = new HashMap<>();
-        user2.put("name", "Sam");
-        user2.put("lastname", "Gamgee");
-        user2.put("age", "30");
+        final User[] users = {user1, user2, user3, user4};
 
-        List<Map<String, String>> users = new ArrayList<>();
-        users.add(user);
-        users.add(user2);
-
-        SimpleAdapter adapter = new SimpleAdapter(getBaseContext(),
-                users,
-                R.layout.item_user,
-                new String[]{"name", "lastname", "age"},
-                new int[]{R.id.text_name, R.id.text_last_name, R.id.text_age}
-        );
+        ListAdapter adapter = new MyUserAdapter(getBaseContext(), users);
 
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int realPos = position % users.length;
+
+                Toast.makeText(MainActivity.this,
+                        users[realPos].getName() + " " + users[realPos].
+                getLastName(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
